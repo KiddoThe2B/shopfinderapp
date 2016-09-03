@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Shop Finder!</string>
+    <string name="fullname">Fullname</string>
+    <string name="button_send">Send</string>
+    <string name="button_signin">Sign In</string>
+    <string name="button_signup">Sign Up</string>
+    <string name="email">E-mail Address</string>
+    <string name="password">Password</string>
+    <string name="button_viewcart">View Cart</string>
+    <string name="button_searchproducts">Search Products</string>
+    <string name="button_addtocart">Add to Cart</string>
+</resources>

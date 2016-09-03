@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    >
+<TextView
+    android:id="@+id/greetings"
+    android:textColor="@android:color/black"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:layout_marginTop="100px"
+    android:textSize="35sp"
+    android:text="NONE"
+    />
+<Button 
+android:id="@+id/viewcart_btn"  
+android:layout_weight="0"  
+android:textSize="50sp"
+android:fontFamily="Arial"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:gravity="center_horizontal"
+android:layout_marginTop="50px"
+android:layout_marginLeft="20px"
+android:layout_marginRight="20px"
+android:text="@string/button_viewcart"
+android:background="@android:color/holo_green_light"
+android:onClick="viewCart"/>
+<Button 
+android:id="@+id/searchproducts_btn"  
+android:layout_weight="0"  
+android:textSize="50sp"
+android:fontFamily="Arial"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:gravity="center_horizontal"
+android:layout_marginTop="50px"
+android:layout_marginLeft="20px"
+android:layout_marginRight="20px"
+android:text="@string/button_searchproducts"
+android:background="@android:color/holo_green_light"
+android:onClick="searchProducts"/>
+</LinearLayout>

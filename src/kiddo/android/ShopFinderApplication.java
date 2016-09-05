@@ -15,6 +15,7 @@ import kiddo.android.models.User;
 public class ShopFinderApplication extends Application {
     User user;
 
+    String IP = "http://192.168.1.67:8084";
     public User getUser() {
         return user;
     }
@@ -22,4 +23,14 @@ public class ShopFinderApplication extends Application {
     public void setUser(User user) {
         this.user = user;
     }
+    
+    
+    public String getIP() {
+        return IP;
+    }
+
+    public void setIP(String IP) {
+        this.IP = IP;
+    }
+    
 }

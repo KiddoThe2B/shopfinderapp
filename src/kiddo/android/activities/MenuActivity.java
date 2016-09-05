@@ -67,14 +67,16 @@ public class MenuActivity extends Activity
     }
    
     public void viewCart(View v){
-        
+        Intent intent = new Intent(getApplicationContext(), CartActivity.class);
+        Log.d("ShopFinder", "Preparing new intent");
+        startActivity(intent);
     }
     
     public void searchProducts(View v) throws InterruptedException{
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-             new MenuActivity.RESTClient().execute();
+             new MenuActivity.RESTClient().execute(((ShopFinderApplication) this.getApplication()).getIP());
              sleep(2000);
              Log.d("ShopFinder", "Data: "+data);
 
@@ -104,7 +106,7 @@ public class MenuActivity extends Activity
 
         @Override
         protected String doInBackground(String... urls) {
-            data = downloadUrl("http://192.168.1.3:8084/shopfinder/catalog");
+            data = downloadUrl(urls[0]+"/shopfinder/catalog");
             return data;
         }
 

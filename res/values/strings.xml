@@ -10,4 +10,6 @@
     <string name="button_viewcart">View Cart</string>
     <string name="button_searchproducts">Search Products</string>
     <string name="button_addtocart">Add to Cart</string>
+    <string name="description">Description:</string>
+    <string name="productid">Product ID:</string>
 </resources>

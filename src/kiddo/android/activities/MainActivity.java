@@ -68,12 +68,12 @@ public class MainActivity extends Activity{
             if(email.getText().toString().length()==0 || password.getText().toString().length()==0){
                     Toast.makeText(this, "Please fill information", Toast.LENGTH_LONG).show();
             }else{
-                    new RESTClient().execute(email.getText().toString());
+                    new RESTClient().execute(((ShopFinderApplication) this.getApplication()).getIP());
                     sleep(2000);
                     Log.d("ShopFinder", "Data: "+data);
                     ((ShopFinderApplication) this.getApplication()).setUser(new User(data));
                     
-                    if (((ShopFinderApplication) this.getApplication()).getUser().getUser_id()!=0){
+                    if (!data.isEmpty() && ((ShopFinderApplication) this.getApplication()).getUser().getUser_id()!=0){
                         Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                         startActivity(intent);
                     }
@@ -104,7 +104,8 @@ public class MainActivity extends Activity{
 
     @Override
     protected String doInBackground(String... urls) {
-        data = downloadUrl("http://192.168.1.3:8084/shopfinder/signin");
+        data = downloadUrl(urls[0]+"/shopfinder/signin");
+        Log.d(("ShopFinder"), urls[0]+"/shopfinder/signin");
         return data;
     }
 
@@ -116,7 +117,7 @@ public class MainActivity extends Activity{
         InputStream is = null;
         // Only display the first 500 characters of the retrieved
         // web page content.
-        int len = 500;
+        int len = 10000;
         try {
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();

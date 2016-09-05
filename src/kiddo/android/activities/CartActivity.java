@@ -11,13 +11,12 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +39,7 @@ import java.util.logging.Logger;
 import kiddo.android.ProductArrayAdapter;
 import kiddo.android.R;
 import kiddo.android.ShopFinderApplication;
+import static kiddo.android.activities.CatalogActivity.products;
 import kiddo.android.models.Item;
 import kiddo.android.models.Product;
 import kiddo.android.models.User;
@@ -47,35 +47,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CatalogActivity extends ListActivity
+public class CartActivity extends ListActivity
 {
     String data;
-    String response;
     int user_id;
     int product_id;
-    private TextView greetings;
-    private Button btn1;
-    private Button btn2;
+    String response;
     static List<Product> products;
-    Bitmap img;
     /** Called when the activity is first created. */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
-//       setContentView(R.layout.catalog);
-       Log.d("ShopFinder","Catalog.onCreate() called!");
-       Intent intent = getIntent();
-       String catalog = intent.getStringExtra(MenuActivity.catalog);
-//       ProductAdapter adb;
-       Log.d("ShopFinder", "Preparing data: "+catalog);
+       Log.d("ShopFinder","Cart.onCreate() called!");
         try {
-            products = this.getCatalog(catalog);
-//          img.recycle();
+            products = this.getCart(((ShopFinderApplication) this.getApplication()).getUser().getUser_id());
         } catch (InterruptedException ex) {
-            Logger.getLogger(CatalogActivity.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CartActivity.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        setListAdapter(new ProductArrayAdapter(this, products,2));
+        setListAdapter(new ProductArrayAdapter(this, products,1));
         getListView().setBackgroundColor(0xFFFFFF);
         getListView().invalidate();
 //       ArrayAdapter adapter = new ArrayAdapter<Product>(this, R.layout.activity_listview, products);
@@ -83,57 +72,40 @@ public class CatalogActivity extends ListActivity
 //       ListView listView = (ListView) findViewById(R.id.product_list);
 //        listView.setAdapter(adapter);
         Log.d("ShopFinder", "Ready data:"+products.size());
-    }
-    
-    public void selectItem(View v){
-        TextView tv = (TextView)v;
-        String text = tv.getText().toString();
-        product_id = (Integer) tv.getTag();
-        Log.d("ShopFinder","Catalog.selectItem() catalog called! ");
-        Product product =null;
-        for(Product prod :products){
-            if(product.getProductId()==product_id){
-                product = prod;
-                break;
-            }
-        }
-        Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
-        intent.putExtra("product", (Serializable) product);
-        startActivity(intent);
-
+        if(products.isEmpty())
+            Toast.makeText(this, "The list is empty", Toast.LENGTH_SHORT).show();
     }
     
     public void handleItem(View v)throws InterruptedException{
         Log.d("ShopFinder","Catalog.selectItem() catalog called!");
         Button b = (Button)v;
         product_id = (Integer) b.getTag();
-        Log.d("ShopFinder","ProductActivity.addToCart() Product id:"+product_id);
+        for(Product prod: products){
+            if(prod.getProductId()==product_id){
+                products.remove(prod);
+            }
+        }
+        ListAdapter adap = getListAdapter();
+        Log.d("ShopFinder","ProductActivity.removeFromCart() Product id:"+product_id);
         user_id = ((ShopFinderApplication) this.getApplication()).getUser().getUser_id();
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            new CatalogActivity.RESTClient2().execute(((ShopFinderApplication) this.getApplication()).getIP());
+            new CartActivity.RESTClient2().execute(((ShopFinderApplication) this.getApplication()).getIP());
             sleep(2000);
             if (!response.isEmpty()){
-                Toast.makeText(this, "Product added to cart successfully", Toast.LENGTH_LONG).show();
-
+                setListAdapter(new ProductArrayAdapter(this, products,1));
+                Toast.makeText(this, "Product removed from cart successfully", Toast.LENGTH_LONG).show();
+                if(products.isEmpty())
+                    Toast.makeText(this, "The list is empty", Toast.LENGTH_SHORT).show();
             }
             else{
-                Toast.makeText(this, "Unable to add to cart", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Unable to remove from cart", Toast.LENGTH_LONG).show();
             }
         }
         else {
             Toast.makeText(this, "No network connection available.", Toast.LENGTH_LONG).show();
         }
-    }
-    
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-
-            //get selected items
-            String selectedValue = (String) getListAdapter().getItem(position);
-            Toast.makeText(this, selectedValue, Toast.LENGTH_SHORT).show();
-
     }
     
     @Override
@@ -150,54 +122,35 @@ public class CatalogActivity extends ListActivity
         Log.d("ShopFinder","Catalog.onDestroy() catalog called!");
     }
     
-    public List<Product> getCatalog(String catalog) throws InterruptedException{
-        List<Product> list = new ArrayList();
-        try {
-            JSONArray array = new JSONArray(catalog);
-            for(int i=0; i<array.length();i++){
-                JSONObject obj = array.getJSONObject(i);
-                list.add(new Product(obj));
-            }
-        } catch (JSONException ex) {
-            
-        }
-//        for(Product p : list){
-//            Log.d("ShopFinder","Retrieve image: "+p.getImage());
-//            new CatalogActivity.ImageLoader().execute(p.getImage());
-//            sleep(1000);
-//            p.setImagebtm(img);
-//        }
-        return list;
-    }
-    
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //RelativeLayout layout = (RelativeLayout) findViewById(R.layout.activity_home);
-
-        getMenuInflater().inflate(R.menu.catalog_menu, menu);
-        return true;
-    }
-    public void searchProducts(View v) throws InterruptedException{
+    public List<Product> getCart(int user_id) throws InterruptedException{
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        this.user_id = user_id;
         if (networkInfo != null && networkInfo.isConnected()) {
-             new CatalogActivity.RESTClient().execute(((ShopFinderApplication) this.getApplication()).getIP());
-             sleep(2000);
-             Log.d("ShopFinder", "Data: "+data);
+            new CartActivity.RESTClient().execute(((ShopFinderApplication) this.getApplication()).getIP());
+            sleep(2000);
+            Log.d("ShopFinder", "Data: "+data);
+            List<Product> list = new ArrayList();
+            try {
+                JSONArray array = new JSONArray(data);
+                for(int i=0; i<array.length();i++){
+                    JSONObject obj = array.getJSONObject(i);
+                    list.add(new Product(obj));
+                }
+            } catch (JSONException ex) {
 
-            if (((ShopFinderApplication) this.getApplication()).getUser().getUser_id()!=0){
-                Intent intent = new Intent(getApplicationContext(), CatalogActivity.class);
-                startActivity(intent);
             }
-            else{
-                Toast.makeText(this, "Unable to serve catalog. Server not responding!", Toast.LENGTH_LONG).show();
-            }
+
+            return list;
+            
         }
         else {
             Toast.makeText(this, "No network connection available.", Toast.LENGTH_LONG).show();
+            return null;
         }
+        
     }
+    
 
     class RESTClient extends AsyncTask<String, Void, String> {
 
@@ -210,7 +163,7 @@ public class CatalogActivity extends ListActivity
 
         @Override
         protected String doInBackground(String... urls) {
-            data = downloadUrl(urls[0]+"/shopfinder/catalog");
+            data = downloadUrl(urls[0]+"/shopfinder/user/"+user_id+"/cart");
             return data;
         }
 
@@ -222,7 +175,7 @@ public class CatalogActivity extends ListActivity
             InputStream is = null;
             // Only display the first 500 characters of the retrieved
             // web page content.
-            int len = 500;
+            int len = 10000;
             try {
                 URL url = new URL(myurl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -237,7 +190,7 @@ public class CatalogActivity extends ListActivity
 
                 // Convert the InputStream into a string
                 String contentAsString = readIt(is, len);
-                contentAsString =contentAsString.substring(0, contentAsString.lastIndexOf("}")+1);
+                contentAsString =contentAsString.substring(0, contentAsString.lastIndexOf("]")+1);
                 Log.d("ShopFinder", "The response is: " + contentAsString);
                 return contentAsString;
 
@@ -267,73 +220,6 @@ public class CatalogActivity extends ListActivity
             return new String(buffer);
         }
     }
-    
-    class ImageLoader extends AsyncTask<String, Void, Bitmap> {
-
-    
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... urls) {
-            img = downloadImage(urls[0]);
-            return img;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-        }
-
-        private Bitmap downloadImage(String myurl){
-            InputStream is = null;
-            // Only display the first 500 characters of the retrieved
-            // web page content.
-            int len = 5000;
-            try {
-                URL url = new URL(myurl);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(20000 /* milliseconds */);
-                conn.setConnectTimeout(25000 /* milliseconds */);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                // Starts the query
-                conn.connect();
-                int response = conn.getResponseCode();
-                is = conn.getInputStream();
-                Bitmap img = BitmapFactory.decodeStream(is);
-                Log.d("ShopFinder", "bitmap:"+img.toString());
-                return img;
-
-            // Makes sure that the InputStream is closed after the app is
-            // finished using it.
-            } 
-            catch(Exception ex){
-                Log.d("ShopFinder", "Image failed!");
-                return null;
-            }
-            finally {
-                if (is != null) {
-                    try {
-                        is.close();
-                    } catch (IOException ex) {
-                    }
-                }
-            }
-        }
-
-        // Reads an InputStream and converts it to a String.
-        public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
-            Reader reader = null;
-            reader = new InputStreamReader(stream, "UTF-8");
-            char[] buffer = new char[len];
-            reader.read(buffer);
-            return new String(buffer);
-        }
-    }
-    
     class RESTClient2 extends AsyncTask<String, Void, String> {
 
     
@@ -345,7 +231,7 @@ public class CatalogActivity extends ListActivity
 
     @Override
     protected String doInBackground(String... urls) {
-        response = downloadUrl(urls[0]+"/shopfinder/addtocart");
+        response = downloadUrl(urls[0]+"/shopfinder/removefromcart");
         return response;
     }
 
@@ -414,6 +300,6 @@ public class CatalogActivity extends ListActivity
         reader.read(buffer);
         return new String(buffer);
     }
-
-}
+    }
+    
 }

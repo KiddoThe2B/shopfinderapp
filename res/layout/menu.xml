@@ -3,11 +3,12 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/white"
+    android:background="@color/grey"
     >
 <TextView
     android:id="@+id/greetings"
-    android:textColor="@android:color/black"
+    android:textStyle="italic"
+    android:textColor="@color/white"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
@@ -27,7 +28,8 @@ android:layout_marginTop="50px"
 android:layout_marginLeft="20px"
 android:layout_marginRight="20px"
 android:text="@string/button_viewcart"
-android:background="@android:color/holo_green_light"
+android:textColor="@color/white"
+android:background="@color/blue"
 android:onClick="viewCart"/>
 <Button 
 android:id="@+id/searchproducts_btn"  
@@ -41,6 +43,7 @@ android:layout_marginTop="50px"
 android:layout_marginLeft="20px"
 android:layout_marginRight="20px"
 android:text="@string/button_searchproducts"
-android:background="@android:color/holo_green_light"
+android:textColor="@color/white"
+android:background="@color/blue"
 android:onClick="searchProducts"/>
 </LinearLayout>

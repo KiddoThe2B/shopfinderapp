@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/white"
+    android:background="@color/grey"
     >
     
  <TextView
@@ -13,9 +13,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50px"
+        android:textStyle="italic"
         android:layout_marginLeft="20px"
         android:layout_marginRight="20px"
         android:textSize="35sp"
+        android:textColor="@color/white"
         android:fontFamily="Arial"        
         android:text="@string/fullname"/>
  <EditText android:id="@+id/fullname"
@@ -25,8 +27,8 @@
         android:layout_marginTop="20px"
         android:layout_marginLeft="20px"
         android:layout_marginRight="20px"
-        android:textSize="35sp"
-        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        android:textColor="@color/white"
         android:fontFamily="Arial"
         android:layout_gravity="center_horizontal"
         android:inputType="text"/>
@@ -35,11 +37,13 @@
         android:layout_weight="0"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:textStyle="italic"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50px"
         android:layout_marginLeft="20px"
         android:layout_marginRight="20px"
         android:textSize="35sp"
+        android:textColor="@color/white"
         android:fontFamily="Arial"        
         android:text="@string/email"/>
  <EditText android:id="@+id/email"
@@ -50,20 +54,22 @@
         android:layout_marginTop="20px"
         android:layout_marginLeft="20px"
         android:layout_marginRight="20px"
-        android:textSize="35sp"
-        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        android:textColor="@color/white"
         android:fontFamily="Arial"        
         android:inputType="textEmailAddress" />
  <TextView
         android:id="@+id/textView2"
         android:layout_weight="0"
         android:layout_width="fill_parent"
+        android:textStyle="italic"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50px"
         android:layout_marginLeft="20px"
         android:layout_marginRight="20px"
         android:textSize="35sp"
+        android:textColor="@color/white"
         android:fontFamily="Arial"        
         android:text="@string/password"/>
  <EditText android:id="@+id/password"
@@ -73,8 +79,8 @@
         android:layout_marginTop="20px"
         android:layout_marginLeft="20px"
         android:layout_marginRight="20px"
-        android:textSize="35sp"
-        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        android:textColor="@color/white"
         android:fontFamily="Arial"
         android:layout_gravity="center_horizontal"
         android:inputType="textPassword"/>
@@ -86,11 +92,12 @@ android:fontFamily="Arial"
 android:layout_width="fill_parent"
 android:layout_height="wrap_content"
 android:gravity="center_horizontal"
-android:layout_marginTop="20px"
+android:layout_marginTop="86dp"
 android:layout_marginLeft="20px"
 android:layout_marginRight="20px"
 android:text="@string/button_signup"
-android:background="@android:color/holo_green_light"
+android:textColor="@color/white"
+android:background="@color/blue"
 android:onClick="signUp"/>
 </LinearLayout>
 

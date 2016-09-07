@@ -92,7 +92,7 @@ public class CatalogActivity extends ListActivity
         Log.d("ShopFinder","Catalog.selectItem() catalog called! ");
         Product product =null;
         for(Product prod :products){
-            if(product.getProductId()==product_id){
+            if(prod.getProductId()==product_id){
                 product = prod;
                 break;
             }

@@ -76,6 +76,24 @@ public class CartActivity extends ListActivity
             Toast.makeText(this, "The list is empty", Toast.LENGTH_SHORT).show();
     }
     
+    public void selectItem(View v){
+        TextView tv = (TextView)v;
+        String text = tv.getText().toString();
+        product_id = (Integer) tv.getTag();
+        Log.d("ShopFinder","Cart.selectItem() catalog called! ");
+        Product product =null;
+        for(Product prod :products){
+            if(prod.getProductId()==product_id){
+                product = prod;
+                break;
+            }
+        }
+        Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
+        intent.putExtra("product", (Serializable) product);
+        startActivity(intent);
+
+    }
+    
     public void handleItem(View v)throws InterruptedException{
         Log.d("ShopFinder","Catalog.selectItem() catalog called!");
         Button b = (Button)v;

@@ -36,6 +36,7 @@ public class MenuActivity extends Activity
     private TextView greetings;
     private Button btn1;
     private Button btn2;
+    private Button btn3;
     /** Called when the activity is first created. */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class MenuActivity extends Activity
        greetings.setText(message);
        btn1=(Button)findViewById(R.id.viewcart_btn);
        btn2=(Button)findViewById(R.id.searchproducts_btn);
+       btn3=(Button)findViewById(R.id.searchstores_btn);
 
        Log.d("ShopFinder","Menu.onCreate() called!");
     }
@@ -68,6 +70,12 @@ public class MenuActivity extends Activity
    
     public void viewCart(View v){
         Intent intent = new Intent(getApplicationContext(), CartActivity.class);
+        Log.d("ShopFinder", "Preparing new intent");
+        startActivity(intent);
+    }
+    
+    public void searchStores(View v){
+        Intent intent = new Intent(getApplicationContext(), StoreSearchActivity.class);
         Log.d("ShopFinder", "Preparing new intent");
         startActivity(intent);
     }

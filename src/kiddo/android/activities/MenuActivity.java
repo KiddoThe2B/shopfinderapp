@@ -28,6 +28,7 @@ import java.util.Map;
 import kiddo.android.R;
 import kiddo.android.ShopFinderApplication;
 import kiddo.android.models.User;
+import static java.lang.Thread.sleep;
 
 public class MenuActivity extends Activity
 {
@@ -74,8 +75,8 @@ public class MenuActivity extends Activity
         startActivity(intent);
     }
     
-    public void searchStores(View v){
-        Intent intent = new Intent(getApplicationContext(), StoreSearchActivity.class);
+    public void viewSettings(View v){
+        Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
         Log.d("ShopFinder", "Preparing new intent");
         startActivity(intent);
     }

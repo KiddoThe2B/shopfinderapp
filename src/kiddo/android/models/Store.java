@@ -7,6 +7,8 @@ package kiddo.android.models;
 
 import java.io.Serializable;
 import java.util.List;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
@@ -20,8 +22,7 @@ public class Store implements Serializable{
     String name;
     String address;
     String image;
-    List<Store_Product> store_products;
-    
+    double price;
 
     public int getStoreId(){
         return id;
@@ -31,7 +32,15 @@ public class Store implements Serializable{
         this.id = id;
     }
 
-    public Store() {
+    public Store(JSONObject obj) {
+        try {
+            id = obj.getInt("id");
+            name = obj.getString("name");
+            address = obj.getString("address");
+            image = obj.getString("image");
+        } catch (JSONException ex) {
+            
+        }
     }
 
     public String getName() {
@@ -57,13 +66,13 @@ public class Store implements Serializable{
     public void setImage(String image) {
         this.image = image;
     }
-    
-    public List<Store_Product> getStore_Products() {
-        return store_products;
+
+    public double getPrice() {
+        return price;
     }
 
-    public void setStore_Products(List<Store_Product> store_products) {
-        this.store_products = store_products;
+    public void setPrice(double price) {
+        this.price = price;
     }
 }
 

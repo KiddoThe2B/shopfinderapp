@@ -3,8 +3,8 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/grey"
-    >
+    android:background="@color/grey">
+
 <TextView
     android:id="@+id/greetings"
     android:textStyle="italic"
@@ -12,7 +12,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:layout_marginTop="100px"
+    android:layout_marginTop="100dp"
     android:textSize="35sp"
     android:text="NONE"
     />
@@ -57,8 +57,8 @@ android:gravity="center_horizontal"
 android:layout_marginTop="50px"
 android:layout_marginLeft="20px"
 android:layout_marginRight="20px"
-android:text="@string/button_searchstores"
+android:text="@string/button_settings"
 android:textColor="@color/white"
 android:background="@color/blue"
-android:onClick="searchStores"/>
+android:onClick="viewSettings"/>
 </LinearLayout>

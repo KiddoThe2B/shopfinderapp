@@ -9,19 +9,19 @@
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 <application android:name=".ShopFinderApplication"  android:label="@string/app_name" android:debuggable="true" android:icon="@drawable/ic_launcher">
-    <activity android:name=".activities.MainActivity">
+    <activity android:name=".activities.MainActivity" android:label="Welcome to ShopFinder">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
-    <activity android:name=".activities.MenuActivity">
+    <activity android:name=".activities.MenuActivity" android:label="Menu">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
-    <activity android:name=".activities.CatalogActivity">
+    <activity android:name=".activities.CatalogActivity" android:label="Products Catalog">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
@@ -33,13 +33,25 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
-    <activity android:name=".activities.CartActivity">
+    <activity android:name=".activities.CartActivity" android:label="Shopping Cart">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
-    <activity android:name=".activities.ProductActivity">
+    <activity android:name=".activities.ProductActivity" android:label="Product Information">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+    <activity android:name=".activities.SettingsActivity" android:label="Settings">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+    <activity android:name=".activities.StoreListActivity" android:label="Stores List">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />

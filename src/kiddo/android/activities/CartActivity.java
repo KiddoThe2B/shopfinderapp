@@ -88,7 +88,7 @@ public class CartActivity extends ListActivity
                 break;
             }
         }
-        Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
+        Intent intent = new Intent(getApplicationContext(), StoreListActivity.class);
         intent.putExtra("product", (Serializable) product);
         startActivity(intent);
 

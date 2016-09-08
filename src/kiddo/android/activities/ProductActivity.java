@@ -38,6 +38,7 @@ import kiddo.android.R;
 import kiddo.android.ShopFinderApplication;
 import kiddo.android.models.Item;
 import kiddo.android.models.Product;
+import kiddo.android.models.Store;
 import kiddo.android.models.User;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,6 +52,8 @@ public class ProductActivity extends Activity
     private String response;
     private int user_id;
     private int product_id;
+    private Product product;
+    private List<Store> stores;
     ImageView imageView;
     private Button btn1;
     /** Called when the activity is first created. */
@@ -61,7 +64,7 @@ public class ProductActivity extends Activity
        Log.d("ShopFinder","Product.onCreate() called!");
        Intent intent = getIntent();
        Log.d("ShopFinder","1");
-       Product product = (Product) intent.getSerializableExtra("product");
+       product = (Product) intent.getSerializableExtra("product");
        Log.d("ShopFinder","2");
        id = (TextView)findViewById(R.id.product_id);       
        id.setText(Integer.toString(product.getProductId()));
@@ -93,6 +96,39 @@ public class ProductActivity extends Activity
         super.onDestroy();
         Log.d("ShopFinder","Product.onDestroy() catalog called!");
     }
+    
+    public void findShops(View v)throws InterruptedException{
+        Log.d("ShopFinder","ProductActivity.addToCart() Product id:"+id.getText().toString());
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            new ProductActivity.RESTShops().execute(((ShopFinderApplication) this.getApplication()).getIP());
+            sleep(2000);
+            if (!response.isEmpty()){
+                    stores = new ArrayList();
+                        try {
+                            JSONArray array = new JSONArray(response);
+                            for(int i=0; i<array.length();i++){
+                                JSONObject obj = array.getJSONObject(i);
+                                JSONObject store = obj.getJSONObject("pk").getJSONObject("store");
+                                double price = obj.getJSONObject("pk").getDouble("price");
+                                stores.add(new Store(store));
+                                stores.get(i).setPrice(price);
+                            }
+                        } catch (JSONException ex) {
+
+                        }
+
+            }
+            else{
+                Toast.makeText(this, "Unable to add to cart", Toast.LENGTH_LONG).show();
+            }
+        }
+        else {
+            Toast.makeText(this, "No network connection available.", Toast.LENGTH_LONG).show();
+        }
+    }
+
    
     public void addToCart(View v) throws InterruptedException{
         Log.d("ShopFinder","ProductActivity.addToCart() Product id:"+id.getText().toString());
@@ -101,7 +137,7 @@ public class ProductActivity extends Activity
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            new ProductActivity.RESTClient().execute(((ShopFinderApplication) this.getApplication()).getIP());
+            new ProductActivity.RESTCart().execute(((ShopFinderApplication) this.getApplication()).getIP());
             sleep(2000);
             if (!response.isEmpty()){
                 Toast.makeText(this, "Product added to cart successfully", Toast.LENGTH_LONG).show();
@@ -116,7 +152,7 @@ public class ProductActivity extends Activity
         }
     }
 
-    class RESTClient extends AsyncTask<String, Void, String> {
+    class RESTCart extends AsyncTask<String, Void, String> {
 
     
     @Override
@@ -199,4 +235,74 @@ public class ProductActivity extends Activity
 
 }
    
+    class RESTShops extends AsyncTask<String, Void, String> {
+
+    
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+    }
+
+    @Override
+    protected String doInBackground(String... urls) {
+        response = downloadUrl(urls[0]+"/shopfinder/product/"+product.getProductId()+"/store_products");
+        return response;
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+    }
+    
+    private String downloadUrl(String myurl){
+        InputStream is = null;
+        // Only display the first 500 characters of the retrieved
+        // web page content.
+        int len = 10000;
+        try {
+            URL url = new URL(myurl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(10000 /* milliseconds */);
+            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setRequestMethod(" GET");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            // Starts the query
+            conn.connect();
+            int response = conn.getResponseCode();
+            is = conn.getInputStream();
+
+            // Convert the InputStream into a string
+            String contentAsString = readIt(is, len);
+            contentAsString =contentAsString.substring(0, contentAsString.lastIndexOf("]")+1);
+            Log.d("ShopFinder", "The response is: " + contentAsString);
+            return contentAsString;
+
+        // Makes sure that the InputStream is closed after the app is
+        // finished using it.
+        } 
+        catch(Exception ex){
+            Log.d("ShopFinder", "POST failed!");
+            return "";
+        }
+        finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException ex) {
+                }
+            }
+        }
+    }
+    
+    // Reads an InputStream and converts it to a String.
+    public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
+        Reader reader = null;
+        reader = new InputStreamReader(stream, "UTF-8");
+        char[] buffer = new char[len];
+        reader.read(buffer);
+        return new String(buffer);
+    }
+
+}
 }

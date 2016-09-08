@@ -11,10 +11,13 @@ package kiddo.android.activities;
  */
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -23,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import java.util.ArrayList;
 import kiddo.android.R;
+import static kiddo.android.R.string.spin;
 
 public class SettingsActivity extends Activity {
     
@@ -48,5 +52,25 @@ public class SettingsActivity extends Activity {
 	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	spinner.setAdapter(dataAdapter);
   }
+  
+   public void apply(View view) {
+       
+     Log.d("ShopFinder","Settings.onApply() called!");
+     
+     radioSearchGroup = (RadioGroup) findViewById(R.id.radioSearch);
+     int modeId = radioSearchGroup.getCheckedRadioButtonId();
+     String dist = spinner.getSelectedItem().toString();
+     
+     SharedPreferences sharedPref = SettingsActivity.this.getPreferences(Context.MODE_PRIVATE);
+     SharedPreferences.Editor editor = sharedPref.edit();
+     editor.putInt(getString(R.string.mode), modeId);
+     editor.putString(getString(R.string.distance), dist);
+     editor.commit();
+     
+     int mode = sharedPref.getInt(getString(R.string.mode), 0);
+     dist = sharedPref.getString(getString(R.string.distance), null);
+     Log.d("ShopFinder","Settings.onApply() called! "+ mode +" "+ dist);
+ }
+
 
 }

@@ -64,6 +64,7 @@ android:layout_marginRight="20dp"
 android:text="@string/applysettings"
 android:textColor="@color/white"
 android:background="@drawable/nicebutton"
+ android:onClick="apply"
 />
 
 </LinearLayout>

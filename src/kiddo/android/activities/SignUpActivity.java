@@ -20,7 +20,11 @@ import java.io.UnsupportedEncodingException;
 import static java.lang.Thread.sleep;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import kiddo.android.R;
+import kiddo.android.ShopFinderApplication;
 
 public class SignUpActivity extends Activity
 {
@@ -65,10 +69,10 @@ public class SignUpActivity extends Activity
             if(email.getText().toString().length()==0 || password.getText().toString().length()==0){
                     Toast.makeText(this, "Please fill information", Toast.LENGTH_LONG).show();
             }else{
-                    new RESTClient().execute(email.getText().toString());
+                    new SignUpActivity.RESTClient().execute(((ShopFinderApplication) this.getApplication()).getIP());
                     sleep(2000);
                     Log.d("ShopFinder", "Data: "+data);
-                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
             }
         }
@@ -88,31 +92,45 @@ public class SignUpActivity extends Activity
 
     @Override
     protected String doInBackground(String... urls) {
-        try {
-            data = downloadUrl("http://192.168.1.3:8084/shopfinder/product/1");
-            return data;
-        } catch (IOException e) {
-            return "Unable to retrieve web page. URL may be invalid.";
-        }
+        data = downloadUrl(urls[0]+"/shopfinder/signup");
+        Log.d(("ShopFinder"), urls[0]+"/shopfinder/signup");
+        return data;
     }
 
     @Override
     protected void onPostExecute(String result) {
-        data = result;
     }
     
-    private String downloadUrl(String myurl) throws IOException {
+    private String downloadUrl(String myurl){
         InputStream is = null;
         // Only display the first 500 characters of the retrieved
         // web page content.
-        int len = 500;
+        int len = 10000;
         try {
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
-            conn.setRequestMethod("GET");
+            conn.setRequestMethod("POST");
+            Map<String,Object> params = new LinkedHashMap();
+            params.put("email", email.getText().toString());
+            params.put("password", password.getText().toString());
+            params.put("fullname", fullname.getText().toString());
+            StringBuilder postData = new StringBuilder();
+            for (Map.Entry<String,Object> param : params.entrySet()) {
+                if (postData.length() != 0) postData.append('&');
+                postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                postData.append('=');
+                postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+            }
+            byte[] postDataBytes = postData.toString().getBytes("UTF-8");
+            Log.d("ShopFinder","email: "+email.getText().toString()+", password: "+password.getText().toString());
+            conn.setRequestProperty("email", email.getText().toString());
+            conn.setRequestProperty("password", password.getText().toString());
+            conn.setRequestProperty("fullname", fullname.getText().toString());
             conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.getOutputStream().write(postDataBytes);
             // Starts the query
             conn.connect();
             int response = conn.getResponseCode();
@@ -125,9 +143,17 @@ public class SignUpActivity extends Activity
 
         // Makes sure that the InputStream is closed after the app is
         // finished using it.
-        } finally {
+        } 
+        catch(Exception ex){
+            Log.d("ShopFinder", "POST failed!");
+            return "";
+        }
+        finally {
             if (is != null) {
-                is.close();
+                try {
+                    is.close();
+                } catch (IOException ex) {
+                }
             }
         }
     }

@@ -68,7 +68,7 @@ public class SettingsActivity extends Activity {
      
      int mode = sharedPref.getInt(getString(R.string.mode), 0);
      dist = sharedPref.getString(getString(R.string.distance), null);
-     Log.d("ShopFinder","Settings.onApply() called! "+ mode +" "+ dist);
+     Toast.makeText(this, "Settings Stored.", Toast.LENGTH_LONG).show();
  }
 
 

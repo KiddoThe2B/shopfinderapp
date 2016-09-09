@@ -23,6 +23,7 @@ public class Store implements Serializable{
     String address;
     String image;
     double price;
+    double distance;
 
     public int getStoreId(){
         return id;
@@ -74,5 +75,14 @@ public class Store implements Serializable{
     public void setPrice(double price) {
         this.price = price;
     }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+    
 }
 

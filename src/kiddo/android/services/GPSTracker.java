@@ -82,20 +82,21 @@ public class GPSTracker extends Service implements LocationListener {
             isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             // Try to get location if you GPS Service is enabled
-            if (isGPSEnabled) {
-                this.isGPSTrackingEnabled = true;
-
-                Log.d("ShopFinder", "Application use GPS Service");
-
-                /*
-                 * This provider determines location using
-                 * satellites. Depending on conditions, this provider may take a while to return
-                 * a location fix.
-                 */
-
-                provider_info = LocationManager.GPS_PROVIDER;
-
-            } else if (isNetworkEnabled) { // Try to get location if you Network Service is enabled
+//            if (isGPSEnabled) {
+//                this.isGPSTrackingEnabled = true;
+//
+//                Log.d("ShopFinder", "Application use GPS Service");
+//
+//                /*
+//                 * This provider determines location using
+//                 * satellites. Depending on conditions, this provider may take a while to return
+//                 * a location fix.
+//                 */
+//
+//                provider_info = LocationManager.GPS_PROVIDER;
+//
+//            } else 
+              if (isNetworkEnabled) { // Try to get location if you Network Service is enabled
                 this.isGPSTrackingEnabled = true;
 
                 Log.d("ShopFinder", "Application use Network State to get GPS coordinates");

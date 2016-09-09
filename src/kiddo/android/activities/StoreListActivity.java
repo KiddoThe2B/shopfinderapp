@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
@@ -73,12 +74,25 @@ public class StoreListActivity extends ListActivity
        Intent intent = getIntent();
        product = (Product) intent.getSerializableExtra("product");
        Log.d("ShopFinder","1 product_id:"+product.getProductId());
-//        try {
-//            this.findShops();
-//        } catch (InterruptedException ex) {
-//            stores = new ArrayList<Store>();
-//        }
-        stores = product.getStores();
+        try {
+            this.findShops();
+        } catch (InterruptedException ex) {
+            stores = new ArrayList<Store>();
+        }
+       SharedPreferences sharedPref = StoreListActivity.this.getSharedPreferences(getString(R.string.distance),Context.MODE_PRIVATE);
+       String distance = sharedPref.getString(getString(R.string.distance), "0");
+       String coords="0";
+        try {
+            coords = this.getCoords();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(StoreListActivity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+//        stores = product.getStores();
+        try {
+            this.filterShops(distance,coords);
+        } catch (InterruptedException ex) {
+            stores = new ArrayList<Store>();
+        }
         Log.d("ShopFinder","2");
         setListAdapter(new StoreArrayAdapter(this, stores,1));
         StoreArrayAdapter sad = (StoreArrayAdapter) getListAdapter();
@@ -150,6 +164,14 @@ public class StoreListActivity extends ListActivity
         }
     }
     
+    public void filterShops(String distance, String coords)throws InterruptedException{
+        for(Store store: stores){
+//            new StoreListActivity.GoogleDirections().execute(coords,store.getAddress());
+//            sleep(2000);
+//            JSONObject obj = new JSONObject(data);
+        }
+    }
+    
     public void buyItem(View v){
        // SAVE AND GO TO REVIEW
 //       Toast.makeText(this, "Can't afford it!", Toast.LENGTH_LONG).show();
@@ -173,8 +195,9 @@ public class StoreListActivity extends ListActivity
         sleep(2000);
         if (gpsTracker.getIsGPSTrackingEnabled())
         {
-            Log.d("ShopFinder","location: ("+gpsTracker.getLongitude()+","+gpsTracker.getLatitude()+")");
-            String uri = String.format(Locale.ENGLISH, "geo:0,0?q=%s", stores.get(index).getAddress().replace(" ", "+"));
+            Log.d("ShopFinder","location: ("+gpsTracker.getLatitude()+","+gpsTracker.getLongitude()+")");
+            String coords = gpsTracker.getLatitude()+","+gpsTracker.getLongitude();
+            String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?saddr=%s&daddr=%s", coords, stores.get(index).getAddress().replace(" ", "+"));
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
             startActivity(intent);
         }
@@ -184,6 +207,20 @@ public class StoreListActivity extends ListActivity
 
         }
 
+    }
+    
+    public String getCoords() throws InterruptedException{
+        GPSTracker gpsTracker = new GPSTracker(this);
+        sleep(2000);
+        if (gpsTracker.getIsGPSTrackingEnabled())
+        {
+            return gpsTracker.getLatitude()+","+gpsTracker.getLongitude();
+        }
+        else
+        {
+            return "0";
+
+        }
     }
 
     
@@ -270,5 +307,74 @@ public class StoreListActivity extends ListActivity
     }
 
 }
+    
+         class GoogleDirections extends AsyncTask<String, Void, String> {
+
+    
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            data = downloadUrl("https://maps.googleapis.com/maps/api/directions/json?origin="+urls[0]+"&destination="+urls[1].replace(" ", "+")+"&key=AIzaSyAAeu0lGsiJN566w3899Cxl7K2NEzurFYU");
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+        }
+
+        private String downloadUrl(String myurl){
+            InputStream is = null;
+            // Only display the first 500 characters of the retrieved
+            // web page content.
+            int len = 10000;
+            try {
+                URL url = new URL(myurl);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(10000 /* milliseconds */);
+                conn.setConnectTimeout(15000 /* milliseconds */);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                // Starts the query
+                conn.connect();
+                int response = conn.getResponseCode();
+                is = conn.getInputStream();
+
+                // Convert the InputStream into a string
+                String contentAsString = readIt(is, len);
+                contentAsString =contentAsString.substring(0, contentAsString.lastIndexOf("}")+1);
+                Log.d("ShopFinder", "The response is: " + contentAsString);
+                return contentAsString;
+
+            // Makes sure that the InputStream is closed after the app is
+            // finished using it.
+            } 
+            catch(Exception ex){
+                Log.d("ShopFinder", "GET failed!");
+                return "";
+            }
+            finally {
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException ex) {
+                    }
+                }
+            }
+        }
+
+        // Reads an InputStream and converts it to a String.
+        public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
+            Reader reader = null;
+            reader = new InputStreamReader(stream, "UTF-8");
+            char[] buffer = new char[len];
+            reader.read(buffer);
+            return new String(buffer);
+        }
+    }
     
 }

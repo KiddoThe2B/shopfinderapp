@@ -57,4 +57,13 @@ public class StoreArrayAdapter extends ArrayAdapter<Store> {
             });
         }
         
+        public void sortByDistance(){
+            super.sort(new Comparator<Store>() {
+            @Override
+            public int compare(Store s1, Store s2) {
+                return Double.compare(s1.getDistance(),s2.getDistance());
+            }
+            });
+        }
+        
 }

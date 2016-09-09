@@ -6,12 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -32,6 +37,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -47,6 +53,7 @@ import kiddo.android.models.Item;
 import kiddo.android.models.Product;
 import kiddo.android.models.Store;
 import kiddo.android.models.User;
+import kiddo.android.services.GPSTracker;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,13 +72,16 @@ public class StoreListActivity extends ListActivity
        Intent intent = getIntent();
        product = (Product) intent.getSerializableExtra("product");
        Log.d("ShopFinder","1 product_id:"+product.getProductId());
-        try {
-            this.findShops();
-        } catch (InterruptedException ex) {
-            stores = new ArrayList<Store>();
-        }
+//        try {
+//            this.findShops();
+//        } catch (InterruptedException ex) {
+//            stores = new ArrayList<Store>();
+//        }
+        stores = product.getStores();
         Log.d("ShopFinder","2");
         setListAdapter(new StoreArrayAdapter(this, stores,1));
+        StoreArrayAdapter sad = (StoreArrayAdapter) getListAdapter();
+//        sad.sortByPrice();
         getListView().setBackgroundColor(0xFFFFFF);
         getListView().invalidate();
         Log.d("ShopFinder", "Ready data:"+stores.size());
@@ -79,6 +89,31 @@ public class StoreListActivity extends ListActivity
             Toast.makeText(this, "The list is empty", Toast.LENGTH_SHORT).show();
     }
     
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //RelativeLayout layout = (RelativeLayout) findViewById(R.layout.activity_home);
+
+        getMenuInflater().inflate(R.menu.storelist_menu, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        StoreArrayAdapter sad = (StoreArrayAdapter) getListAdapter();
+        switch (item.getItemId()) {
+            case R.id.sortprice:
+                sad.sortByPrice();
+                return true;
+            case R.id.sortdistance:
+                sad.sortByPrice();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public void findShops()throws InterruptedException{
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -127,14 +162,28 @@ public class StoreListActivity extends ListActivity
     }
     
     public void callMaps(View v)throws InterruptedException{
+        
         // SHOW MAP
         Log.d("ShopFinder","StoreListActivity.callMaps() called");
         int index = (Integer) v.getTag();
-        Log.d("ShopFinder","store_id: "+index);
-        String uri = String.format(Locale.ENGLISH, "geo:0,0?q=%s", stores.get(index).getAddress().replace(" ", "+"));
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        startActivity(intent);
+        // check if GPS enabled
+        GPSTracker gpsTracker = new GPSTracker(this);
+        sleep(2000);
+        if (gpsTracker.getIsGPSTrackingEnabled())
+        {
+            Log.d("ShopFinder","location: ("+gpsTracker.getLongitude()+","+gpsTracker.getLatitude()+")");
+            String uri = String.format(Locale.ENGLISH, "geo:0,0?q=%s", stores.get(index).getAddress().replace(" ", "+"));
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            startActivity(intent);
+        }
+        else
+        {
+            Toast.makeText(this, "GPS not enabled", Toast.LENGTH_LONG).show();
+
+        }
+
     }
+
     
     @Override
     protected void onPause()

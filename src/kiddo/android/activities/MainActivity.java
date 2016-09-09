@@ -3,6 +3,7 @@ package kiddo.android.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -10,7 +11,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +37,8 @@ public class MainActivity extends Activity{
     private EditText password;
     private Button btn;
     private String data;
+    private RadioGroup radio;
+    private static CheckBox checkbox;
 
     /** Called when the activity is first created. */
     @Override
@@ -43,6 +49,10 @@ public class MainActivity extends Activity{
         email=(EditText)findViewById(R.id.email);
         password =(EditText)findViewById(R.id.password);
         btn=(Button)findViewById(R.id.signin_btn);
+        checkbox = (CheckBox) findViewById(R.id.remember);
+       SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.preference_file_key),Context.MODE_PRIVATE);
+       String s = sharedPref.getString(getString(R.string.user_email), "poutses");
+       Log.d("ShopFinder", "Remember: "+ s);
         Log.d("ShopFinder","Main.onCreate() called!");
     }
     
@@ -74,6 +84,14 @@ public class MainActivity extends Activity{
                     ((ShopFinderApplication) this.getApplication()).setUser(new User(data));
                     
                     if (!data.isEmpty() && ((ShopFinderApplication) this.getApplication()).getUser().getUser_id()!=0){
+                        if (checkbox.isChecked()) {
+                            Log.d("ShopFinder", "Remember me"+data);
+                            SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.preference_file_key),Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putString(getString(R.string.user_email), ((ShopFinderApplication) this.getApplication()).getUser().getEmail());
+                            editor.putString(getString(R.string.user_password), ((ShopFinderApplication) this.getApplication()).getUser().getPassword());
+                            editor.commit();
+                        }
                         Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                         startActivity(intent);
                     }

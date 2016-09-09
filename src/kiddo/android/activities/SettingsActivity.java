@@ -26,7 +26,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import java.util.ArrayList;
 import kiddo.android.R;
-import static kiddo.android.R.string.spin;
 
 public class SettingsActivity extends Activity {
     
@@ -61,7 +60,7 @@ public class SettingsActivity extends Activity {
      int modeId = radioSearchGroup.getCheckedRadioButtonId();
      String dist = spinner.getSelectedItem().toString();
      
-     SharedPreferences sharedPref = SettingsActivity.this.getPreferences(Context.MODE_PRIVATE);
+     SharedPreferences sharedPref = SettingsActivity.this.getSharedPreferences(getString(R.string.preference_file_key),Context.MODE_PRIVATE);
      SharedPreferences.Editor editor = sharedPref.edit();
      editor.putInt(getString(R.string.mode), modeId);
      editor.putString(getString(R.string.distance), dist);

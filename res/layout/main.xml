@@ -51,6 +51,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:textSize="30sp"
@@ -58,6 +59,15 @@
         android:fontFamily="Arial"
         android:layout_gravity="center_horizontal"
         android:inputType="textPassword"/>
+ 
+ <CheckBox android:id="@+id/remember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_gravity="left"
+        android:text="@string/rememberme"
+        android:checked="true"/>
 <Button 
 android:id="@+id/signin_btn"  
 android:layout_weight="0"  

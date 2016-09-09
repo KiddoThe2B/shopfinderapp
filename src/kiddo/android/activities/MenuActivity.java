@@ -3,6 +3,7 @@ package kiddo.android.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -44,6 +45,9 @@ public class MenuActivity extends Activity
        super.onCreate(savedInstanceState);
        setContentView(R.layout.menu);
        Log.d("ShopFinder","Menu.onCreate() called!");
+       SharedPreferences sharedPref = MenuActivity.this.getSharedPreferences(getString(R.string.preference_file_key),Context.MODE_PRIVATE);
+       String s = sharedPref.getString(getString(R.string.user_email), "poutses");
+       Log.d("ShopFinder", "Remember: "+ s);
        Intent intent = getIntent();
        String message = "Hi "+ ((ShopFinderApplication) this.getApplication()).getUser().getFullname() + "!";
        greetings = (TextView)findViewById(R.id.greetings);

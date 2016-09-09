@@ -12,6 +12,7 @@
     <string name="button_addtocart">Add to Cart</string>
     <string name="description">Description:</string>
     <string name="productid">Product ID:</string>
+    <string name="productprice">Best Price:</string>
     <string name="spin">-</string>
     <string name="KM">by Km</string>
     <string name="minutes">by minutes</string>

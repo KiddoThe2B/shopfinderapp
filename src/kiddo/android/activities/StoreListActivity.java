@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +34,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -114,12 +116,24 @@ public class StoreListActivity extends ListActivity
     
     public void buyItem(View v){
        // SAVE AND GO TO REVIEW
-       Toast.makeText(this, "Can't afford it!", Toast.LENGTH_LONG).show();
+//       Toast.makeText(this, "Can't afford it!", Toast.LENGTH_LONG).show();
+        Log.d("ShopFinder","StoreListActivity.callMaps() called");
+        int index = (Integer) v.getTag();
+        Log.d("ShopFinder","store_id: "+index);
+        String uri = String.format(Locale.ENGLISH, "google.navigation:mode=d&q=%s", stores.get(index).getAddress().replace(" ", "+"));
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
     }
     
     public void callMaps(View v)throws InterruptedException{
         // SHOW MAP
-        Toast.makeText(this, "Google Map unaivalable", Toast.LENGTH_LONG).show();
+        Log.d("ShopFinder","StoreListActivity.callMaps() called");
+        int index = (Integer) v.getTag();
+        Log.d("ShopFinder","store_id: "+index);
+        String uri = String.format(Locale.ENGLISH, "geo:0,0?q=%s", stores.get(index).getAddress().replace(" ", "+"));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        startActivity(intent);
     }
     
     @Override

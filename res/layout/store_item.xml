@@ -74,6 +74,7 @@
    android:onClick="buyItem"
    android:layout_weight="0.2"
    android:text="Buy">
+   android:onClick="buyItem"
     </Button >
     
     <Button  xmlns:android="http://schemas.android.com/apk/res/android"

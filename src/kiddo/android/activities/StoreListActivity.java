@@ -57,6 +57,7 @@ import kiddo.android.services.GPSTracker;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import static java.lang.Thread.sleep;
 
 public class StoreListActivity extends ListActivity
 {
@@ -152,13 +153,14 @@ public class StoreListActivity extends ListActivity
     public void buyItem(View v){
        // SAVE AND GO TO REVIEW
 //       Toast.makeText(this, "Can't afford it!", Toast.LENGTH_LONG).show();
-        Log.d("ShopFinder","StoreListActivity.callMaps() called");
+        Log.d("ShopFinder","StoreListActivity.buyItem() called");
         int index = (Integer) v.getTag();
         Log.d("ShopFinder","store_id: "+index);
-        String uri = String.format(Locale.ENGLISH, "google.navigation:mode=d&q=%s", stores.get(index).getAddress().replace(" ", "+"));
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        mapIntent.setPackage("com.google.android.apps.maps");
-        startActivity(mapIntent);
+        Intent intent = new Intent(getApplicationContext(), ReviewsActivity.class);
+        intent.putExtra("store", (Serializable) stores.get(index));
+        intent.putExtra("product", (Serializable) product);
+        Log.d("ShopFinder", "Preparing new intent");
+        startActivity(intent);
     }
     
     public void callMaps(View v)throws InterruptedException{

@@ -45,6 +45,8 @@ public class MenuActivity extends Activity
        super.onCreate(savedInstanceState);
        setContentView(R.layout.menu);
        Log.d("ShopFinder","Menu.onCreate() called!");
+       int size = ((ShopFinderApplication) this.getApplication()).getUser().getCart().size();
+       Log.d("ShopFinder","size:"+size);
        SharedPreferences sharedPref = MenuActivity.this.getSharedPreferences(getString(R.string.preference_file_key),Context.MODE_PRIVATE);
        String s = sharedPref.getString(getString(R.string.user_email), "poutses");
        Log.d("ShopFinder", "Remember: "+ s);

@@ -33,9 +33,11 @@ public class ProductArrayAdapter extends ArrayAdapter<Product> {
 		View rowView = inflater.inflate(R.layout.list_item, parent, false);
                 TextView tv = (TextView) rowView.findViewById(R.id.product_id);
                 TextView tv2 = (TextView) rowView.findViewById(R.id.product_name);
+                TextView tv3 = (TextView) rowView.findViewById(R.id.product_price);
 		Button button1 = (Button) rowView.findViewById(R.id.button_item);
                 tv.setText(Integer.toString(products.get(position).getProductId()));
                 tv2.setText(products.get(position).getName());
+                tv3.setText(Double.toString(products.get(position).getPrice()));
                 tv2.setTag(Integer.valueOf(products.get(position).getProductId()));
                 button1.setTag(Integer.valueOf(products.get(position).getProductId()));
                 if(button==1){

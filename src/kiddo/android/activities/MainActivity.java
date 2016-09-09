@@ -51,7 +51,7 @@ public class MainActivity extends Activity{
         btn=(Button)findViewById(R.id.signin_btn);
         checkbox = (CheckBox) findViewById(R.id.remember);
        SharedPreferences sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.preference_file_key),Context.MODE_PRIVATE);
-       String s = sharedPref.getString(getString(R.string.user_email), "poutses");
+       String s = sharedPref.getString(getString(R.string.user_email), "nchfg");
        Log.d("ShopFinder", "Remember: "+ s);
         Log.d("ShopFinder","Main.onCreate() called!");
     }

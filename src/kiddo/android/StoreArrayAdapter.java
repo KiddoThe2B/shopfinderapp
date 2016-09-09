@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import kiddo.android.models.Product;
 import kiddo.android.models.Store;
@@ -46,5 +47,14 @@ public class StoreArrayAdapter extends ArrayAdapter<Store> {
                         
 		return rowView;
 	}
+        
+        public void sortByPrice(){
+            super.sort(new Comparator<Store>() {
+            @Override
+            public int compare(Store s1, Store s2) {
+                return Double.compare(s1.getPrice(),s2.getPrice());
+            }
+            });
+        }
         
 }

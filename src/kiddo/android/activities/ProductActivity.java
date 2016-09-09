@@ -49,6 +49,7 @@ public class ProductActivity extends Activity
     private TextView name;
     private TextView desc;
     private TextView id;
+    private TextView price;
     private String response;
     private int user_id;
     private int product_id;
@@ -73,6 +74,8 @@ public class ProductActivity extends Activity
        name.setText(product.getName());
        desc = (TextView)findViewById(R.id.product_desc);
        desc.setText(product.getDescription());
+       price = (TextView)findViewById(R.id.product_price);
+       price.setText(Double.toString(product.getPrice()));
        Log.d("ShopFinder","4");
 //       imageView = (ImageView)findViewById(R.id.product_image);
 //       if(product.getImagebtm()!=null){

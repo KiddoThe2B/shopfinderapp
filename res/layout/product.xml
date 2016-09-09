@@ -12,7 +12,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50px"
+        android:layout_marginTop="40px"
         android:layout_marginLeft="20px"
         android:layout_marginRight="20px"
         android:textSize="50sp"
@@ -23,7 +23,7 @@
    android:layout_width="fill_parent"
    android:layout_height="wrap_content"
    android:orientation="horizontal"
-   android:layout_marginTop="30dp"
+   android:layout_marginTop="25dp"
    android:weightSum="1" >
   <TextView
         android:id="@+id/textView2"
@@ -41,6 +41,40 @@
         android:text="@string/productid"/>
  <TextView
         android:id="@+id/product_id"
+        android:layout_weight="0.8"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginTop="20px"
+        android:layout_marginLeft="-180dp"
+        android:layout_marginRight="20px"
+        android:textSize="20sp"
+        android:fontFamily="Arial"  
+        android:textColor="@color/white"      
+        android:text="@string/password"/>
+  </LinearLayout>
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="fill_parent"
+   android:layout_height="wrap_content"
+   android:orientation="horizontal"
+   android:layout_marginTop="15px"
+   android:weightSum="1" >
+  <TextView
+        android:id="@+id/textView2"
+        android:layout_weight="0.2"
+        android:textStyle="italic"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginTop="50px"
+        android:layout_marginLeft="20px"
+        android:layout_marginRight="0px"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:fontFamily="sans-serif-medium"        
+        android:text="@string/productprice"/>
+ <TextView
+        android:id="@+id/product_price"
         android:layout_weight="0.8"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -73,7 +107,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20px"
+        android:layout_marginTop="15px"
         android:layout_marginLeft="20px"
         android:layout_marginRight="20px"
         android:textSize="20sp"

@@ -5,6 +5,9 @@
  */
 package kiddo.android.models;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -21,7 +24,11 @@ public class Item {
     }
 
     Item(JSONObject obj) {
-        
+        try {
+            product = new Product(obj.getJSONObject("pk").getJSONObject("product"));
+        } catch (JSONException ex) {
+            Logger.getLogger(Item.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public User getUser() {

@@ -7,6 +7,7 @@ package kiddo.android.models;
 
 import android.graphics.Bitmap;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +28,8 @@ public class Product implements Serializable{
     String description;
     String image;
     Bitmap imagebtm;
-
+    List<Store> stores;
+    double price;
 
     public Product(JSONObject obj) {
         try {
@@ -35,7 +37,18 @@ public class Product implements Serializable{
             name = obj.getString("name");
             description = obj.getString("description");
             image = obj.getString("image");
-
+            JSONArray store_products = obj.getJSONArray("store_products");
+            price = Double.MAX_VALUE; 
+            stores = new ArrayList();
+            for(int i=0; i<store_products.length();i++){
+                Store store = new Store(store_products.getJSONObject(i).getJSONObject("pk").getJSONObject("store"));
+                store.setPrice(store_products.getJSONObject(i).getDouble("price"));
+                stores.add(store);
+                double temp =store_products.getJSONObject(i).getDouble("price");
+                if(temp < price){
+                    price = temp;
+                }
+            }    
         } catch (JSONException ex) {
             
         }
@@ -83,9 +96,27 @@ public class Product implements Serializable{
     public void setImagebtm(Bitmap imagebtm) {
         this.imagebtm = imagebtm;
     }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
     
     @Override
     public String toString() {
         return this.id + ". " + this.name;
     }
+
+    public List<Store> getStores() {
+        return stores;
+    }
+
+    public void setStores(List<Store> stores) {
+        this.stores = stores;
+    }
+    
+    
 }

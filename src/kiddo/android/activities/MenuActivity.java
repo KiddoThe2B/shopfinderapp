@@ -48,7 +48,7 @@ public class MenuActivity extends Activity
        int size = ((ShopFinderApplication) this.getApplication()).getUser().getCart().size();
        Log.d("ShopFinder","size:"+size);
        SharedPreferences sharedPref = MenuActivity.this.getSharedPreferences(getString(R.string.preference_file_key),Context.MODE_PRIVATE);
-       String s = sharedPref.getString(getString(R.string.user_email), "poutses");
+       String s = sharedPref.getString(getString(R.string.user_email), "nothing");
        Log.d("ShopFinder", "Remember: "+ s);
        Intent intent = getIntent();
        String message = "Hi "+ ((ShopFinderApplication) this.getApplication()).getUser().getFullname() + "!";

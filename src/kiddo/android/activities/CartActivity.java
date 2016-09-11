@@ -68,10 +68,6 @@ public class CartActivity extends ListActivity
         setListAdapter(new ProductArrayAdapter(this, products,1));
         getListView().setBackgroundColor(0xFFFFFF);
         getListView().invalidate();
-//       ArrayAdapter adapter = new ArrayAdapter<Product>(this, R.layout.activity_listview, products);
-////       adb= new ProductAdapter (CatalogActivity.this, 0, this.getCatalog(catalog));
-//       ListView listView = (ListView) findViewById(R.id.product_list);
-//        listView.setAdapter(adapter);
         Log.d("ShopFinder", "Ready data:"+products.size());
         if(products.isEmpty())
             Toast.makeText(this, "The list is empty", Toast.LENGTH_SHORT).show();

@@ -62,15 +62,12 @@ public class CatalogActivity extends ListActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
-//       setContentView(R.layout.catalog);
        Log.d("ShopFinder","Catalog.onCreate() called!");
        Intent intent = getIntent();
        String catalog = intent.getStringExtra(MenuActivity.catalog);
-//       ProductAdapter adb;
        Log.d("ShopFinder", "Preparing data: "+catalog);
         try {
             products = this.getCatalog(catalog);
-//          img.recycle();
         } catch (InterruptedException ex) {
             Logger.getLogger(CatalogActivity.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -78,10 +75,6 @@ public class CatalogActivity extends ListActivity
         setListAdapter(new ProductArrayAdapter(this, products,2));
         getListView().setBackgroundColor(0xFFFFFF);
         getListView().invalidate();
-//       ArrayAdapter adapter = new ArrayAdapter<Product>(this, R.layout.activity_listview, products);
-////       adb= new ProductAdapter (CatalogActivity.this, 0, this.getCatalog(catalog));
-//       ListView listView = (ListView) findViewById(R.id.product_list);
-//        listView.setAdapter(adapter);
         Log.d("ShopFinder", "Ready data:"+products.size());
     }
     
@@ -161,19 +154,11 @@ public class CatalogActivity extends ListActivity
         } catch (JSONException ex) {
             
         }
-//        for(Product p : list){
-//            Log.d("ShopFinder","Retrieve image: "+p.getImage());
-//            new CatalogActivity.ImageLoader().execute(p.getImage());
-//            sleep(1000);
-//            p.setImagebtm(img);
-//        }
         return list;
     }
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //RelativeLayout layout = (RelativeLayout) findViewById(R.layout.activity_home);
 
         getMenuInflater().inflate(R.menu.catalog_menu, menu);
         return true;
@@ -222,7 +207,7 @@ public class CatalogActivity extends ListActivity
             InputStream is = null;
             // Only display the first 500 characters of the retrieved
             // web page content.
-            int len = 500;
+            int len = 5000;
             try {
                 URL url = new URL(myurl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();

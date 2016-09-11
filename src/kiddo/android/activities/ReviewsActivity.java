@@ -31,6 +31,7 @@ public class ReviewsActivity extends Activity {
   private TextView text;
   private Spinner spinner;
   private EditText review;
+  private EditText price;
   private Button btnSubmit;
     
   @Override
@@ -53,6 +54,7 @@ public class ReviewsActivity extends Activity {
 	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	spinner.setAdapter(dataAdapter);
         review =(EditText)findViewById(R.id.review_input);
+        price =(EditText)findViewById(R.id.real_price);
         btnSubmit = (Button) findViewById(R.id.btnSubmit);
     
   }
@@ -62,9 +64,11 @@ public class ReviewsActivity extends Activity {
      Log.d("ShopFinder","Reviews.onSubmit() called!");
      String rating = spinner.getSelectedItem().toString();
      String review_str = null;
+     String price_str = null;
      if(this.review.getText().toString().length()!=0) review_str = this.review.getText().toString();
+     if(this.price.getText().toString().length()!=0) price_str = this.price.getText().toString();
      
-     Log.d("ShopFinder","Reviews.onSubmit() called! "+ rating +" "+ review_str);
+     Log.d("ShopFinder","Reviews.onSubmit() called! "+ rating +" "+ review_str+" "+ price);
      
      }
 }

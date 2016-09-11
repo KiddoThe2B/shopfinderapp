@@ -16,6 +16,7 @@
     <string name="from">Bought from:</string>
     <string name="rating">Your Rating:</string>
     <string name="review_text">Your Review:</string>
+    <string name="real_price">Final Price:</string>
     <string name="submit">Submit</string>
     <string name="spin">-</string>
     <string name="KM">by Km</string>
